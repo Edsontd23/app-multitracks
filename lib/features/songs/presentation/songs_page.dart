@@ -1,3 +1,4 @@
+import 'package:app_multitracks/features/songs/data/song_library_importer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -14,29 +15,26 @@ class SongsPage extends StatefulWidget {
 }
 
 class _SongsPageState extends State<SongsPage> {
-  final SongImporter importer = SongImporter();
+  final SongLibraryImporter libraryImporter = SongLibraryImporter();
 
-  Song? song;
+  List<Song> songs = [];
 
   String? folderName;
 
   Future<void> selectFolder() async {
-    debugPrint('Abriendo selector...');
-
-    final folderPath = await FilePicker.getDirectoryPath();
-
-    debugPrint('Carpeta seleccionada: $folderPath');
+    final folderPath =
+        await FilePicker.getDirectoryPath();
 
     if (folderPath == null) return;
 
-    final result = await importer.importFolder(folderPath);
-
-    debugPrint('Canción: ${result.title}');
-    debugPrint('Assets encontrados: ${result.assets.length}');
+    final result =
+        await libraryImporter.importLibrary(
+          folderPath,
+        );
 
     setState(() {
-      song = result;
-      folderName = result.title;
+      songs = result;
+      folderName = folderPath.split('/').last;
     });
   }
 
@@ -71,16 +69,19 @@ class _SongsPageState extends State<SongsPage> {
 
             const SizedBox(height: 16),
 
-            if (song != null)
+            if (songs.isNotEmpty)
             Expanded(
               child: ListView.builder(
-                itemCount: song!.assets.length,
+                itemCount: songs.length,
                 itemBuilder: (context, index) {
-                  final asset = song!.assets[index];
+                  final song = songs[index];
 
                   return ListTile(
-                    title: Text(asset.name),
-                    subtitle: Text(asset.type.name),
+                    leading: const Icon(Icons.library_music),
+                    title: Text(song.title),
+                    subtitle: Text(
+                      '${song.assets.length} archivos',
+                    ),
                   );
                 },
               ),
