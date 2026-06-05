@@ -1,9 +1,9 @@
-import 'package:app_multitracks/features/player/domain/track_player.dart';
+import '../domain/track_player.dart';
 
-class MultitrackController {
+class MultitrackEngine {
   final List<TrackPlayer> tracks;
 
-  MultitrackController(this.tracks);
+  MultitrackEngine(this.tracks);
 
   Future<void> loadAll() async {
     for (final t in tracks) {

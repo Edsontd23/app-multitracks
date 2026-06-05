@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../songs/domain/song.dart';
-import '../domain/multitrack_player.dart';
-import '../application/multitrack_controller.dart';
+import '../../../core/session/session_instance.dart';
+import '../../player/application/multitrack_controller.dart';
+import '../../player/domain/track_player.dart';
 
 class PlayerPage extends StatefulWidget {
-  final Song song;
-
   const PlayerPage({super.key});
 
   @override
@@ -14,16 +12,6 @@ class PlayerPage extends StatefulWidget {
 }
 
 class _PlayerPageState extends State<PlayerPage> {
-
-  final song = songSession.currentSong;
-
-  if (song == null) {
-    return const Scaffold(
-      body: Center(
-        child: Text('No song selected'),
-      ),
-    );
-  }
   late MultitrackController controller;
   bool loaded = false;
 
@@ -31,7 +19,11 @@ class _PlayerPageState extends State<PlayerPage> {
   void initState() {
     super.initState();
 
-    final tracks = widget.song.audioTracks.map((asset) {
+    final song = songSession.currentSong;
+
+    if (song == null) return;
+
+    final tracks = song.audioTracks.map((asset) {
       return TrackPlayer(
         name: asset.name,
         path: asset.path,
@@ -50,12 +42,24 @@ class _PlayerPageState extends State<PlayerPage> {
 
   @override
   void dispose() {
-    controller.dispose();
+    if (loaded) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final song = songSession.currentSong;
+
+    if (song == null) {
+      return const Scaffold(
+        body: Center(
+          child: Text('No song selected'),
+        ),
+      );
+    }
+
     if (!loaded) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -64,7 +68,7 @@ class _PlayerPageState extends State<PlayerPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mixer - ${widget.song.title}'),
+        title: Text('Player - ${song.title}'),
         actions: [
           IconButton(
             icon: const Icon(Icons.play_arrow),
@@ -89,7 +93,7 @@ class _PlayerPageState extends State<PlayerPage> {
             title: Text(track.name),
             subtitle: StreamBuilder<double>(
               stream: track.player.volumeStream,
-              initialData: track.volume,
+              initialData: 1.0,
               builder: (context, snapshot) {
                 final value = snapshot.data ?? 1.0;
 
@@ -97,8 +101,8 @@ class _PlayerPageState extends State<PlayerPage> {
                   value: value,
                   min: 0,
                   max: 1,
-                  onChanged: (v) {
-                    track.setVolume(v);
+                  onChanged: (v) async {
+                    await track.setVolume(v);
                     setState(() {});
                   },
                 );

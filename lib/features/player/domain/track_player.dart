@@ -6,12 +6,11 @@ class TrackPlayer {
 
   final AudioPlayer player = AudioPlayer();
 
-  double volume;
+  double volume = 1.0;
 
   TrackPlayer({
     required this.name,
     required this.path,
-    this.volume = 1.0,
   });
 
   Future<void> load() async {
@@ -19,22 +18,18 @@ class TrackPlayer {
     await player.setVolume(volume);
   }
 
-  Future<void> play() async {
-    await player.play();
-  }
+  Future<void> play() async => player.play();
 
-  Future<void> pause() async {
-    await player.pause();
-  }
+  Future<void> pause() async => player.pause();
 
-  Future<void> stop() async {
-    await player.stop();
-  }
+  Future<void> stop() async => player.stop();
 
   Future<void> setVolume(double value) async {
     volume = value;
     await player.setVolume(value);
   }
+
+  double get currentVolume => volume;
 
   void dispose() {
     player.dispose();
