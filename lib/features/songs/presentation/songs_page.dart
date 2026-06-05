@@ -1,4 +1,5 @@
 import 'package:app_multitracks/features/songs/data/song_library_importer.dart';
+import 'package:app_multitracks/features/songs/presentation/song_detail_page.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -82,6 +83,15 @@ class _SongsPageState extends State<SongsPage> {
                     subtitle: Text(
                       '${song.assets.length} archivos',
                     ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              SongDetailPage(song: song),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
