@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../data/song_importer.dart';
 import '../domain/song.dart';
 
+import 'package:flutter/foundation.dart';
+
 class SongsPage extends StatefulWidget {
   const SongsPage({super.key});
 
@@ -12,23 +14,29 @@ class SongsPage extends StatefulWidget {
 }
 
 class _SongsPageState extends State<SongsPage> {
-  final dynamic scanner = SongImporter();
+  final SongImporter importer = SongImporter();
 
-  List<Song> songs = [];
+  Song? song;
 
   String? folderName;
 
   Future<void> selectFolder() async {
-    final folderPath =
-        await FilePicker.getDirectoryPath();
+    debugPrint('Abriendo selector...');
+
+    final folderPath = await FilePicker.getDirectoryPath();
+
+    debugPrint('Carpeta seleccionada: $folderPath');
 
     if (folderPath == null) return;
 
-    final result = await scanner.scanFolder(folderPath);
+    final result = await importer.importFolder(folderPath);
+
+    debugPrint('Canción: ${result.title}');
+    debugPrint('Assets encontrados: ${result.assets.length}');
 
     setState(() {
-      songs = result;
-      folderName = folderPath.split('/').last;
+      song = result;
+      folderName = result.title;
     });
   }
 
@@ -63,15 +71,16 @@ class _SongsPageState extends State<SongsPage> {
 
             const SizedBox(height: 16),
 
+            if (song != null)
             Expanded(
               child: ListView.builder(
-                itemCount: songs.length,
+                itemCount: song!.assets.length,
                 itemBuilder: (context, index) {
-                  final song = songs[index];
+                  final asset = song!.assets[index];
 
                   return ListTile(
-                    leading: const Icon(Icons.music_note),
-                    title: Text(song.title),
+                    title: Text(asset.name),
+                    subtitle: Text(asset.type.name),
                   );
                 },
               ),
