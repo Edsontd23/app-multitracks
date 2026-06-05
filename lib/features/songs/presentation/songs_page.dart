@@ -12,9 +12,9 @@ class SongsPage extends StatefulWidget {
 }
 
 class _SongsPageState extends State<SongsPage> {
-  final scanner = SongImporter();
+  final dynamic scanner = SongImporter();
 
-  List<Track> tracks = [];
+  List<Song> songs = [];
 
   String? folderName;
 
@@ -27,7 +27,7 @@ class _SongsPageState extends State<SongsPage> {
     final result = await scanner.scanFolder(folderPath);
 
     setState(() {
-      tracks = result;
+      songs = result;
       folderName = folderPath.split('/').last;
     });
   }
@@ -65,13 +65,13 @@ class _SongsPageState extends State<SongsPage> {
 
             Expanded(
               child: ListView.builder(
-                itemCount: tracks.length,
+                itemCount: songs.length,
                 itemBuilder: (context, index) {
-                  final track = tracks[index];
+                  final song = songs[index];
 
                   return ListTile(
                     leading: const Icon(Icons.music_note),
-                    title: Text(track.name),
+                    title: Text(song.title),
                   );
                 },
               ),
