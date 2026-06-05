@@ -87,8 +87,7 @@ class _SongsPageState extends State<SongsPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) =>
-                              SongDetailPage(song: song),
+                          builder: (_) => SongDetailPage(song: song),
                         ),
                       );
                     },
