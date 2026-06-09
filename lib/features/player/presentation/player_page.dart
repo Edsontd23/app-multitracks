@@ -1,7 +1,8 @@
+import 'package:app_multitracks/core/audio/daw_platform.dart';
+import 'package:app_multitracks/features/songs/domain/song_asset_type.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/session/session_instance.dart';
-import '../../player/application/multitrack_controller.dart';
 import '../../player/domain/track_player.dart';
 
 class PlayerPage extends StatefulWidget {
@@ -12,39 +13,53 @@ class PlayerPage extends StatefulWidget {
 }
 
 class _PlayerPageState extends State<PlayerPage> {
-  late MultitrackController controller;
   bool loaded = false;
+  List<double> volumes = [];
+  List<TrackModel> tracks = [];
+  List<bool> muted = [];
 
   @override
   void initState() {
     super.initState();
 
+
     final song = songSession.currentSong;
 
     if (song == null) return;
 
-    final tracks = song.audioTracks.map((asset) {
-      return TrackPlayer(
+    tracks = song.audioTracks.map((asset) {
+      return TrackModel(
         name: asset.name,
         path: asset.path,
       );
     }).toList();
 
-    controller = MultitrackController(tracks);
+    muted = List.generate(
+      tracks.length,
+      (_) => false,
+    );
 
+    final paths = song.assets
+      .where((a) => a.type == SongAssetType.audio)
+      .map((a) => a.path)
+      .toList();
+
+    DAWPlatform.instance.loadTracks(paths);
+    setState(() {
+      volumes = List.generate(
+        tracks.length,
+        (_) => 1.0,
+      );
+    });
     _load();
   }
 
   Future<void> _load() async {
-    await controller.loadAll();
     setState(() => loaded = true);
   }
 
   @override
   void dispose() {
-    if (loaded) {
-      controller.dispose();
-    }
     super.dispose();
   }
 
@@ -69,55 +84,77 @@ class _PlayerPageState extends State<PlayerPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Player - ${song.title}'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.play_arrow),
-            onPressed: controller.playAll,
-          ),
-          IconButton(
-            icon: const Icon(Icons.pause),
-            onPressed: controller.pauseAll,
-          ),
-          IconButton(
-            icon: const Icon(Icons.stop),
-            onPressed: controller.stopAll,
-          ),
-        ],
       ),
-      body: ListView.builder(
-        itemCount: controller.tracks.length,
-        itemBuilder: (context, index) {
-          final track = controller.tracks[index];
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () async {
+                  await DAWPlatform.instance.play();
+                },
+                child: const Icon(Icons.play_arrow),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  await DAWPlatform.instance.stop();
+                },
+                child: const Icon(Icons.stop),
+              ),
+            ],
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: tracks.length,
+              itemBuilder: (_, index) {
+                return Column(
+                  children: [
 
-          return ListTile(
-            title: Text(track.name),
-            subtitle: StreamBuilder<double>(
-              stream: track.player.volumeStream,
-              initialData: 1.0,
-              builder: (context, snapshot) {
-                final value = snapshot.data ?? 1.0;
+                    Text(tracks[index].name),
 
-                return Slider(
-                  value: value,
-                  min: 0,
-                  max: 1,
-                  onChanged: (v) async {
-                    await track.setVolume(v);
-                    setState(() {});
-                  },
+                    Slider(
+                      min: 0,
+                      max: 1,
+                      value: tracks[index].volume,
+                      onChanged: (value) async {
+
+                        setState(() {
+                          tracks[index].volume = value;
+                        });
+
+                        await DAWPlatform.instance.setVolume(
+                          index,
+                          value
+                        );
+                      },
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+
+                        final value = !muted[index];
+
+                        setState(() {
+                          muted[index] = value;
+                        });
+
+                        await DAWPlatform.instance.mute(
+                          index,
+                          value,
+                        );
+                      },
+                      child: Text(
+                        muted[index]
+                          ? 'UNMUTE'
+                          : 'MUTE',
+                      ),
+                    )
+                  ],
                 );
               },
             ),
-            trailing: IconButton(
-              icon: const Icon(Icons.volume_off),
-              onPressed: () async {
-                final newValue = track.volume > 0 ? 0.0 : 1.0;
-                await track.setVolume(newValue);
-                setState(() {});
-              },
-            ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
