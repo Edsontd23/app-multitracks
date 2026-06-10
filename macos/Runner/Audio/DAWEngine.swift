@@ -9,6 +9,9 @@ final class DAWEngine {
     private var playerNodes: [AVAudioPlayerNode] = []
     private var mixerNodes: [AVAudioMixerNode] = []
     private var audioFiles: [AVAudioFile] = []
+    private var trackVolumes: [Float] = []
+    private var trackMuted: [Bool] = []
+    private var trackSolo: [Bool] = []
 
     private init() {}
 
@@ -27,6 +30,11 @@ final class DAWEngine {
         playerNodes.removeAll()
         audioFiles.removeAll()
         mixerNodes.removeAll()
+        playerNodes.removeAll()
+
+        trackVolumes.removeAll()
+        trackMuted.removeAll()
+        trackSolo.removeAll()
 
         for path in paths {
 
@@ -58,6 +66,9 @@ final class DAWEngine {
             playerNodes.append(node)
             mixerNodes.append(mixer)
             audioFiles.append(file)
+            trackVolumes.append(1.0)
+            trackMuted.append(false)
+            trackSolo.append(false)
         }
 
         try? engine.start()
@@ -87,21 +98,58 @@ final class DAWEngine {
         engine.stop()
     }
 
-    func setVolume(track: Int, volume: Float) {
-        guard track >= 0,
-            track < mixerNodes.count else {
+    func setVolume(track: Int,volume: Float) {
+        guard track < trackVolumes.count else {
             return
         }
-        mixerNodes[track].outputVolume = volume
+
+        trackVolumes[track] = volume
+
+        updateMix()
     }
 
-    func mute(track: Int, enabled: Bool) {
+    func mute(track: Int,enabled: Bool) {
 
-        guard track >= 0,
-            track < mixerNodes.count else {
+        guard track < trackMuted.count else {
             return
         }
 
-        mixerNodes[track].outputVolume = enabled ? 0 : 1
+        trackMuted[track] = enabled
+
+        updateMix()
+    }
+
+    func solo(track: Int,enabled: Bool) {
+
+        guard track < trackSolo.count else {
+            return
+        }
+
+        trackSolo[track] = enabled
+
+        updateMix()
+    }
+
+    private func updateMix() {
+
+        let hasSolo = trackSolo.contains(true)
+
+        for i in 0..<mixerNodes.count {
+
+            if hasSolo {
+
+                mixerNodes[i].outputVolume =
+                    trackSolo[i]
+                    ? trackVolumes[i]
+                    : 0.0
+
+            } else {
+
+                mixerNodes[i].outputVolume =
+                    trackMuted[i]
+                    ? 0.0
+                    : trackVolumes[i]
+            }
+        }
     }
 }

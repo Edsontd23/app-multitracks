@@ -1,4 +1,5 @@
 import 'package:app_multitracks/core/audio/daw_platform.dart';
+import 'package:app_multitracks/core/theme/app_colors.dart';
 import 'package:app_multitracks/features/songs/domain/song_asset_type.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,8 @@ class _PlayerPageState extends State<PlayerPage> {
   List<double> volumes = [];
   List<TrackModel> tracks = [];
   List<bool> muted = [];
+  List<bool> soloed = [];
+  bool isPlaying = false;
 
   @override
   void initState() {
@@ -34,10 +37,8 @@ class _PlayerPageState extends State<PlayerPage> {
       );
     }).toList();
 
-    muted = List.generate(
-      tracks.length,
-      (_) => false,
-    );
+    muted = List.generate(tracks.length, (_) => false);
+    soloed = List.generate(tracks.length, (_) => false);
 
     final paths = song.assets
       .where((a) => a.type == SongAssetType.audio)
@@ -83,73 +84,127 @@ class _PlayerPageState extends State<PlayerPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Player - ${song.title}'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              '${songSession.currentSong!.title.toUpperCase().split('-')[0]}\n${songSession.currentSong!.title.toUpperCase().split('-')[1].trim()}',
+              softWrap: true,
+              textWidthBasis: TextWidthBasis.parent,
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+
+                if (isPlaying) {
+
+                  await DAWPlatform.instance.stop();
+
+                } else {
+
+                  await DAWPlatform.instance.play();
+
+                }
+
+                setState(() {
+                  isPlaying = !isPlaying;
+                });
+              },
+              child: Icon(
+                isPlaying
+                  ? Icons.stop
+                  : Icons.play_arrow,
+              ),
+            ),
+            Row(
+              children: [
+                Text('BPM: \n120', style: TextStyle(fontSize: 12),),
+                Text('KEY: \nC', style: TextStyle(fontSize: 12),),
+              ],
+            )
+          ],
+        ),
+        backgroundColor: Colors.transparent,
       ),
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () async {
-                  await DAWPlatform.instance.play();
-                },
-                child: const Icon(Icons.play_arrow),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  await DAWPlatform.instance.stop();
-                },
-                child: const Icon(Icons.stop),
-              ),
-            ],
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: tracks.length,
               itemBuilder: (_, index) {
-                return Column(
-                  children: [
-
-                    Text(tracks[index].name),
-
-                    Slider(
-                      min: 0,
-                      max: 1,
-                      value: tracks[index].volume,
-                      onChanged: (value) async {
-
-                        setState(() {
-                          tracks[index].volume = value;
-                        });
-
-                        await DAWPlatform.instance.setVolume(
-                          index,
-                          value
-                        );
-                      },
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-
-                        final value = !muted[index];
-
-                        setState(() {
-                          muted[index] = value;
-                        });
-
-                        await DAWPlatform.instance.mute(
-                          index,
-                          value,
-                        );
-                      },
-                      child: Text(
-                        muted[index]
-                          ? 'UNMUTE'
-                          : 'MUTE',
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 2.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                  
+                      Text(tracks[index].name.split('.')[0]),
+                  
+                      Slider(
+                        min: 0,
+                        max: 1,
+                        value: tracks[index].volume,
+                        onChanged: (value) async {
+                          setState(() {
+                            tracks[index].volume = value;
+                          });
+                  
+                          await DAWPlatform.instance.setVolume(
+                            index,
+                            value
+                          );
+                        },
                       ),
-                    )
-                  ],
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () async {
+                          
+                              final value = !muted[index];
+                          
+                              setState(() {
+                                muted[index] = value;
+                              });
+                          
+                              await DAWPlatform.instance.mute(
+                                index,
+                                value,
+                              );
+                            },
+                            child: Icon(
+                              color: muted[index] ? AppColors.primary : AppColors.secondary,
+                              muted[index]
+                                ? Icons.volume_off
+                                : Icons.volume_up,
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                          
+                              final value = !soloed[index];
+                          
+                              setState(() {
+                                soloed[index] = value;
+                              });
+                          
+                              await DAWPlatform.instance.solo(
+                                index,
+                                value,
+                              );
+                            },
+                            child: Icon(
+                              soloed[index]
+                                ? Icons.do_disturb_on
+                                : Icons.do_disturb_off,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 );
               },
             ),

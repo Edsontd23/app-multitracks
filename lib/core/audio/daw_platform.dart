@@ -37,4 +37,14 @@ class DAWPlatform {
       },
     );
   }
+
+  Future<void> solo(int index,bool enabled,) async {
+    await _channel.invokeMethod(
+      'solo',
+      {
+        'index': index,
+        'enabled': enabled,
+      },
+    );
+  }
 }

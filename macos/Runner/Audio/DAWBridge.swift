@@ -71,6 +71,18 @@ public class DAWBridge: NSObject, FlutterPlugin {
             }
 
             result(true)
+        case "solo":
+            if let args = call.arguments as? [String: Any],
+            let index = args["index"] as? Int,
+            let enabled = args["enabled"] as? Bool {
+
+                DAWEngine.shared.solo(
+                    track: index,
+                    enabled: enabled
+                )
+            }
+
+            result(true)
 
         default:
             result(FlutterMethodNotImplemented)
