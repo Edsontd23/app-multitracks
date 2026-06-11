@@ -62,11 +62,11 @@ public class DAWBridge: NSObject, FlutterPlugin {
 
             if let args = call.arguments as? [String: Any],
             let index = args["index"] as? Int,
-            let enabled = args["enabled"] as? Bool {
+            let muted = args["muted"] as? Bool {
 
                 DAWEngine.shared.mute(
                     track: index,
-                    enabled: enabled
+                    muted: muted
                 )
             }
 

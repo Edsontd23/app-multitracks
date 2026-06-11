@@ -1,3 +1,4 @@
+import 'package:app_multitracks/core/tracks/track_mapper.dart';
 import 'package:app_multitracks/features/player/domain/track_player.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,7 @@ class _MixerPageState extends State<MixerPage> {
       return TrackModel(
         name: a.name,
         path: a.path,
+        style: TrackMapper.fromName(a.name),
       );
     }).toList();
 

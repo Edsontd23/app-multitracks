@@ -29,8 +29,9 @@ class DAWPlatform {
     );
   }
 
-  Future<void> mute( int index, bool enabled) async {
-    await _channel.invokeMethod('mute',
+  Future<void> mute( int index, bool enabled,) async {
+    await _channel.invokeMethod(
+      'mute',
       {
         'index': index,
         'enabled': enabled,
@@ -45,6 +46,27 @@ class DAWPlatform {
         'index': index,
         'enabled': enabled,
       },
+    );
+  }
+
+  Future<void> seek(double seconds) async {
+    await _channel.invokeMethod(
+      'seek',
+      {
+        'seconds': seconds,
+      },
+    );
+  }
+
+  Future<double> position() async {
+    return await _channel.invokeMethod(
+      'position',
+    );
+  }
+
+  Future<double> duration() async {
+    return await _channel.invokeMethod(
+      'duration',
     );
   }
 }

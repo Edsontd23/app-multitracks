@@ -58,17 +58,19 @@ class AppDelegate: FlutterAppDelegate {
                 }
                 result(true)
             case "mute":
+                print("🔥 MUTE RECEIVED")
                 if let args = call.arguments as? [String: Any],
                 let index = args["index"] as? Int,
                 let enabled = args["enabled"] as? Bool {
 
                     DAWEngine.shared.mute(
                         track: index,
-                        enabled: enabled
+                        muted: enabled
                     )
                 }
 
                 result(true)
+
             case "solo":
                 if let args = call.arguments as? [String: Any],
                 let index = args["index"] as? Int,
@@ -82,6 +84,25 @@ class AppDelegate: FlutterAppDelegate {
 
                 result(true)
 
+            case "seek":
+
+                if let args = call.arguments as? [String: Any],
+                let seconds = args["seconds"] as? Double {
+
+                    DAWEngine.shared.seek(
+                        seconds: seconds
+                    )
+                }
+
+                result(true)
+            case "position":
+                result(
+                    DAWEngine.shared.position()
+                )
+            case "duration":
+                result(
+                    DAWEngine.shared.duration()
+                )
             default:
                 result(FlutterMethodNotImplemented)
             }
