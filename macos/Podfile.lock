@@ -1,22 +1,31 @@
 PODS:
+  - ffmpeg_kit_flutter_new (1.0.0):
+    - ffmpeg_kit_flutter_new/full-gpl (= 1.0.0)
+    - FlutterMacOS
+  - ffmpeg_kit_flutter_new/full-gpl (1.0.0):
+    - FlutterMacOS
   - FlutterMacOS (1.0.0)
   - pdfx (1.0.0):
     - FlutterMacOS
 
 DEPENDENCIES:
+  - ffmpeg_kit_flutter_new (from `Flutter/ephemeral/.symlinks/plugins/ffmpeg_kit_flutter_new/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - pdfx (from `Flutter/ephemeral/.symlinks/plugins/pdfx/macos`)
 
 EXTERNAL SOURCES:
+  ffmpeg_kit_flutter_new:
+    :path: Flutter/ephemeral/.symlinks/plugins/ffmpeg_kit_flutter_new/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
   pdfx:
     :path: Flutter/ephemeral/.symlinks/plugins/pdfx/macos
 
 SPEC CHECKSUMS:
+  ffmpeg_kit_flutter_new: 232d8f11b0946313b329b1b444aaf41c8bf8dccc
   FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
   pdfx: 1e79f57f7a6ce2f4a4c30f21fa54d3dc82441b51
 
 PODFILE CHECKSUM: 54d867c82ac51cbd61b565781b9fada492027009
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.17.0

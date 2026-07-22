@@ -43,6 +43,9 @@ dependencies:
   just_audio: ^0.10.5
   pdfx: ^2.9.2
   open_filex: ^4.7.0
+  just_waveform: ^0.0.5
+  path_provider: ^2.1.5
+  ffmpeg_kit_flutter_new: ^2.0.0
 
 dev_dependencies:
   flutter_test:

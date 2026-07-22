@@ -21,9 +21,7 @@ final class DAWEngine {
     private init() {}
 
     // MARK: - INIT ENGINE
-
     func initEngine() {
-
         engine.mainMixerNode.outputVolume = 1.0
 
         do {

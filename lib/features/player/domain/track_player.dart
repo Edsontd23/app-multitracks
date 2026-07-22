@@ -8,6 +8,7 @@ class TrackModel {
   bool muted;
   bool solo;
   final TrackStyle style;
+  List<double>? waveform;
 
   TrackModel({
     required this.name,

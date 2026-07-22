@@ -1,0 +1,185 @@
+{
+  "object" : {
+    "artifacts" : [
+
+    ],
+    "dependencies" : [
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "audio_session-0.2.3",
+          "kind" : "fileSystem",
+          "location" : "/Users/edsontorres/app_multitracks/ios/Flutter/ephemeral/Packages/.packages/audio_session-0.2.3",
+          "name" : "audio_session"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/edsontorres/app_multitracks/ios/Flutter/ephemeral/Packages/.packages/audio_session-0.2.3"
+        },
+        "subpath" : "audio_session-0.2.3"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "dkcamera",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/zhangao0086/DKCamera",
+          "name" : "DKCamera"
+        },
+        "state" : {
+          "checkoutState" : {
+            "branch" : "master",
+            "revision" : "5c691d11014b910aff69f960475d70e65d9dcc96"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "DKCamera"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "dkimagepickercontroller",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/zhangao0086/DKImagePickerController",
+          "name" : "DKImagePickerController"
+        },
+        "state" : {
+          "checkoutState" : {
+            "branch" : "4.3.9",
+            "revision" : "0bdfeacefa308545adde07bef86e349186335915"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "DKImagePickerController"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "dkphotogallery",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/zhangao0086/DKPhotoGallery",
+          "name" : "DKPhotoGallery"
+        },
+        "state" : {
+          "checkoutState" : {
+            "branch" : "master",
+            "revision" : "311c1bc7a94f1538f82773a79c84374b12a2ef3d"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "DKPhotoGallery"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "file_picker-11.0.2",
+          "kind" : "fileSystem",
+          "location" : "/Users/edsontorres/app_multitracks/ios/Flutter/ephemeral/Packages/.packages/file_picker-11.0.2",
+          "name" : "file_picker"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/edsontorres/app_multitracks/ios/Flutter/ephemeral/Packages/.packages/file_picker-11.0.2"
+        },
+        "subpath" : "file_picker-11.0.2"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "flutterframework",
+          "kind" : "fileSystem",
+          "location" : "/Users/edsontorres/app_multitracks/ios/Flutter/ephemeral/Packages/.packages/FlutterFramework",
+          "name" : "FlutterFramework"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/edsontorres/app_multitracks/ios/Flutter/ephemeral/Packages/.packages/FlutterFramework"
+        },
+        "subpath" : "flutterframework"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "just_audio-0.10.5",
+          "kind" : "fileSystem",
+          "location" : "/Users/edsontorres/app_multitracks/ios/Flutter/ephemeral/Packages/.packages/just_audio-0.10.5",
+          "name" : "just_audio"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/edsontorres/app_multitracks/ios/Flutter/ephemeral/Packages/.packages/just_audio-0.10.5"
+        },
+        "subpath" : "just_audio-0.10.5"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "sdwebimage",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/SDWebImage/SDWebImage",
+          "name" : "SDWebImage"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "2de3a496eaf6df9a1312862adcfd54acd73c39c0",
+            "version" : "5.21.7"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "SDWebImage"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "shared_preferences_foundation-2.5.6",
+          "kind" : "fileSystem",
+          "location" : "/Users/edsontorres/app_multitracks/ios/Flutter/ephemeral/Packages/.packages/shared_preferences_foundation-2.5.6",
+          "name" : "shared_preferences_foundation"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/edsontorres/app_multitracks/ios/Flutter/ephemeral/Packages/.packages/shared_preferences_foundation-2.5.6"
+        },
+        "subpath" : "shared_preferences_foundation-2.5.6"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "swiftygif",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/kirualex/SwiftyGif.git",
+          "name" : "SwiftyGif"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "4430cbc148baa3907651d40562d96325426f409a",
+            "version" : "5.4.5"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "SwiftyGif"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "tocropviewcontroller",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/TimOliver/TOCropViewController",
+          "name" : "TOCropViewController"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "d4a6d8100f4b886fdbc8ae399bf144ff3e9afb7e",
+            "version" : "2.8.0"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "TOCropViewController"
+      }
+    ],
+    "prebuilts" : [
+
+    ]
+  },
+  "version" : 7
+}

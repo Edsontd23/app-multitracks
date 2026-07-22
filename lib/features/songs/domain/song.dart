@@ -1,13 +1,17 @@
+import 'package:app_multitracks/features/songs/domain/song_marker.dart';
+
 import 'song_asset.dart';
 import 'song_asset_type.dart';
 
 class Song {
   final String title;
   final List<SongAsset> assets;
-
-  const Song({
+  final List<SongMarker> markers;
+  List<double>? waveform;
+  Song({
     required this.title,
     required this.assets,
+    this.markers = const []
   });
 
   List<SongAsset> byType(SongAssetType type) {
@@ -53,6 +57,10 @@ class Song {
   bool get hasChords => chordsCount > 0;
 
   bool get hasArtwork => artworkCount > 0;
+
+  bool get hasMarkers => markers.isNotEmpty;
+
+  int get markerCount => markers.length;
 
   SongAsset? get artwork {
     if (artworkFiles.isEmpty) return null;
