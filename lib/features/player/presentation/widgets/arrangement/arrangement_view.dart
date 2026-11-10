@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../core/tracks/track_mapper.dart';
-import '../../../../songs/domain/song_marker.dart';
 import '../../../domain/track_player.dart';
 
 
 class ArrangementView extends StatelessWidget {
-
 
   final List<TrackModel> tracks;
   final Duration duration;
@@ -25,95 +21,42 @@ class ArrangementView extends StatelessWidget {
   });
 
 
-
   @override
   Widget build(BuildContext context) {
 
-
-    final timelineWidth =
-        duration.inMilliseconds /
-        1000 *
+    final width =
+        duration.inMilliseconds / 1000 *
         pixelsPerSecond;
-
 
 
     return SizedBox(
 
-      height:
-          tracks.length * 80,
-
+      height: tracks.length * 80,
 
       child: SingleChildScrollView(
-        controller: scrollController,
-        scrollDirection:
-            Axis.horizontal,
 
+        controller: scrollController,
+
+        scrollDirection: Axis.horizontal,
 
         child: SizedBox(
 
-          width:
-              timelineWidth + 200,
+          width: width,
 
+          child: Column(
 
-          child: Stack(
+            children: tracks.map(
+              (track){
 
-  children: [
+                return _TrackRow(
+                  track: track,
+                  pixelsPerSecond: pixelsPerSecond,
+                );
 
+              },
+            ).toList(),
 
-    Column(
-
-      mainAxisSize:
-          MainAxisSize.min,
-
-      children: [
-
-        for(
-          int i = 0;
-          i < tracks.length;
-          i++
-        )
-
-        _TrackRow(
-          track: tracks[i],
-          width: timelineWidth,
-        ),
-
-      ],
-
-    ),
-
-
-
-    Positioned(
-
-      left:
-        position.inMilliseconds /
-        1000 *
-        pixelsPerSecond,
-
-
-      top:0,
-
-
-      bottom:0,
-
-
-      child: Container(
-
-        width:2,
-
-        color:
-        Colors.red,
-
-
-      ),
-
-    ),
-
-
-  ],
-
-),
+          ),
 
         ),
 
@@ -127,115 +70,47 @@ class ArrangementView extends StatelessWidget {
 
 
 
-
 class _TrackRow extends StatelessWidget {
 
-
   final TrackModel track;
-  final double width;
-
+  final double pixelsPerSecond;
 
 
   const _TrackRow({
-
     required this.track,
-    required this.width,
-
+    required this.pixelsPerSecond,
   });
 
 
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
+
+
+    final clips = track.clips;
 
 
     return SizedBox(
 
       height:80,
 
+      child: Stack(
 
-      child: Row(
-
-        children: [
-
+        children:[
 
 
-          SizedBox(
+          Container(
 
-            width:150,
+            height:80,
 
+            decoration: BoxDecoration(
 
-            child: Container(
-
-              padding:
-                  const EdgeInsets.all(8),
-
-
-              decoration:
-                  BoxDecoration(
-
-                    color:
-                      track.style.color
-                      .withOpacity(.15),
-
-                    border:
-                      Border(
-                        right:
-                        BorderSide(
-                          color:
-                          Colors.white12,
-                        ),
-                      ),
-
-                  ),
-
-
-              child: Row(
-
-                children: [
-
-
-                  Icon(
-                    track.style.icon,
-                    color:
-                      track.style.color,
-                  ),
-
-
-                  const SizedBox(
-                    width:8,
-                  ),
-
-
-                  Expanded(
-
-                    child: Text(
-
-                      track.name
-                          .split('.')
-                          .first,
-
-
-                      overflow:
-                        TextOverflow
-                        .ellipsis,
-
-
-                      style:
-                      const TextStyle(
-                        color:
-                        Colors.white,
-                        fontSize:12,
-                      ),
-
-                    ),
-
-                  ),
-
-
-                ],
-
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.white12,
+                ),
               ),
+
+              color:Colors.black12,
 
             ),
 
@@ -243,90 +118,51 @@ class _TrackRow extends StatelessWidget {
 
 
 
-          SizedBox(
-
-            width:width,
+          ...clips.map((clip){
 
 
-            child: Container(
+            final left =
+                clip.start.inMilliseconds /
+                1000 *
+                pixelsPerSecond;
 
-              decoration:
-              BoxDecoration(
 
-                border:
-                Border(
 
-                  bottom:
-                  BorderSide(
-                    color:
-                    Colors.white12,
-                  ),
+            final width =
+                clip.duration.inMilliseconds /
+                1000 *
+                pixelsPerSecond;
+
+
+
+            return Positioned(
+
+              left:left,
+
+              width:width,
+
+              top:10,
+
+              bottom:10,
+
+
+              child: Container(
+
+                decoration:BoxDecoration(
+
+                  color:Colors.blueGrey,
+
+                  borderRadius:
+                    BorderRadius.circular(6),
 
                 ),
 
               ),
 
-
-              child: Stack(
-
-                children: [
+            );
 
 
-
-                  Positioned.fill(
-
-                    child: CustomPaint(
-
-                      painter:
-                      _GridPainter(),
-
-                    ),
-
-                  ),
-
-
-
-                  Positioned(
-
-                    left:0,
-                    top:20,
-
-
-                    child: Container(
-
-                      height:35,
-
-
-                      width:
-                      width,
-
-
-                      decoration:
-                      BoxDecoration(
-
-                        color:
-                        track.style.color
-                            .withOpacity(.35),
-
-
-                        borderRadius:
-                        BorderRadius.circular(6),
-
-                      ),
-
-                    ),
-
-                  ),
-
-
-
-                ],
-
-              ),
-
-            ),
-
-          ),
+          }),
 
 
         ],
@@ -335,65 +171,7 @@ class _TrackRow extends StatelessWidget {
 
     );
 
-  }
-
-}
-
-
-
-
-
-class _GridPainter extends CustomPainter {
-
-
-  @override
-  void paint(
-      Canvas canvas,
-      Size size,
-      ) {
-
-
-    const step = 100.0;
-
-
-    final paint =
-    Paint()
-      ..color =
-      Colors.white12
-      ..strokeWidth =
-      1;
-
-
-
-    for(
-    double x=0;
-    x<size.width;
-    x+=step
-    ){
-
-      canvas.drawLine(
-
-        Offset(x,0),
-
-        Offset(
-          x,
-          size.height,
-        ),
-
-        paint,
-
-      );
-
-    }
 
   }
-
-
-
-  @override
-  bool shouldRepaint(
-      CustomPainter oldDelegate,
-      )
-  => false;
 
 }

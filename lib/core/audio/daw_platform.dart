@@ -15,6 +15,10 @@ class DAWPlatform {
     await _channel.invokeMethod('play');
   }
 
+  Future<void> pause() async {
+    await _channel.invokeMethod('pause');
+  }
+
   Future<void> stop() async {
     await _channel.invokeMethod('stop');
   }
@@ -56,6 +60,30 @@ class DAWPlatform {
         'seconds': seconds,
       },
     );
+  }
+
+  Future<void> setLoopStart(double seconds) async {
+    await _channel.invokeMethod('setLoopStart', {
+      'seconds': seconds,
+    });
+  }
+
+  Future<void> setLoopEnd(double seconds) async {
+    await _channel.invokeMethod('setLoopEnd', {
+      'seconds': seconds,
+    });
+  }
+
+  Future<void> setLoopEnabled(bool enabled) async {
+    await _channel.invokeMethod('setLoopEnabled', {
+      'enabled': enabled,
+    });
+  }
+
+  Future<void> setTranspose(int semitones) async {
+    await _channel.invokeMethod('setTranspose', {
+      'semitones': semitones,
+    });
   }
 
   Future<double> position() async {

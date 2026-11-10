@@ -4,15 +4,24 @@ import 'song_asset.dart';
 import 'song_asset_type.dart';
 
 class Song {
-  final String title;
+  String title;
+  final String folderPath;
   final List<SongAsset> assets;
   final List<SongMarker> markers;
   List<double>? waveform;
-  Song({
-    required this.title,
-    required this.assets,
-    this.markers = const []
-  });
+    // Configuración musical
+  double? bpm;
+  String? timeSignature;
+  String? originalKey;
+Song({
+  required this.title,
+  required this.folderPath,
+  required this.assets,
+  List<SongMarker>? markers,
+  this.bpm,
+  this.timeSignature,
+  this.originalKey,
+}) : markers = markers ?? [];
 
   List<SongAsset> byType(SongAssetType type) {
     return assets.where((asset) => asset.type == type).toList();
